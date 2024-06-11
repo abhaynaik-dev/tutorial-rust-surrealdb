@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+ rustapp:
+   env_file:
+   - path: ./.env
+     required: true
+   container_name: tutorial_rust_surrealdb
+   image: abhayNaik/rustapp:1.0.0
+   build:
+     context: .
+     dockerfile: Dockerfile
+   ports:
+       - '8080:8080'
+   environment:
+      - ENV=dev
+      - RUST_BACKTRACE=1
+   depends_on:
+       - db
+
+ db:
+   user: root
+   entrypoint:
+      - /surreal
+      - start
+      - --user
+      - root
+      - --pass
+      - root
+   image: surrealdb/surrealdb:latest
+   ports:
+      - 8000:8000
